@@ -1,0 +1,152 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-white text-black dark:bg-gray-900 dark:text-white transition duration-300"
+>
+  <button
+    (click)="toggleTheme()"
+    class="cursor-pointer fixed top-4 right-4 px-3 py-1 rounded bg-gray-800 text-white dark:bg-white dark:text-black"
+  >
+    Toggle Theme
+  </button>
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+    <!-- Title -->
+    <h2 class="text-2xl font-bold text-center text-gray-800 dark:text-white mb-6">Sign Up</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <!-- Name -->
+      <input
+        type="text"
+        placeholder="Name"
+        formControlName="fullName"
+        class="w-full px-4 py-2 rounded-md border bg-gray-50 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+
+      <p
+        *ngIf="registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid"
+        class="text-red-500 text-sm"
+      >
+        Name is required
+      </p>
+
+      <!-- Email -->
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+        class="w-full px-4 py-2 rounded-md border bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+      />
+
+      <p
+        *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+        class="text-red-500 text-sm"
+      >
+        Enter valid email
+      </p>
+
+      <!-- Password -->
+      <div class="relative">
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Password"
+          formControlName="password"
+          class="w-full px-4 py-2 rounded-md border bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+        />
+
+        <span
+          (click)="showPassword = !showPassword"
+          class="absolute right-3 top-2 cursor-pointer text-gray-500 dark:text-gray-300"
+        >
+          👁️
+        </span>
+      </div>
+
+      <p
+        *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+        class="text-red-500 text-sm"
+      >
+        Minimum 8 characters
+      </p>
+
+      <!-- Password Strength Bar -->
+      <div class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded mt-2">
+        <div
+          class="h-2 rounded transition-all duration-300"
+          [ngClass]="strengthClass"
+          [style.width]="
+            passwordStrength === 'Weak'
+              ? '33%'
+              : passwordStrength === 'Medium'
+                ? '66%'
+                : passwordStrength === 'Strong'
+                  ? '100%'
+                  : '0%'
+          "
+        ></div>
+      </div>
+
+      <p
+        class="text-sm mt-1"
+        [ngClass]="{
+          'text-red-500': passwordStrength === 'Weak',
+          'text-orange-500': passwordStrength === 'Medium',
+          'text-green-500': passwordStrength === 'Strong',
+        }"
+      >
+        {{ passwordStrength }}
+      </p>
+
+      <!-- Confirm Password -->
+      <div class="relative">
+        <input
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          placeholder="Confirm password"
+          formControlName="confirmPassword"
+          class="w-full px-4 py-2 rounded-md border bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+        />
+
+        <span
+          (click)="showConfirmPassword = !showConfirmPassword"
+          class="absolute right-3 top-2 cursor-pointer text-gray-500 dark:text-gray-300"
+        >
+          👁️
+        </span>
+      </div>
+
+      <p
+        *ngIf="registerForm.get('confirmPassword')?.errors?.['mismatch']"
+        class="text-red-500 text-sm"
+      >
+        Passwords do not match
+      </p>
+
+      <!-- Button -->
+      <button
+        type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md transition"
+      >
+        Sign Up
+      </button>
+
+      <!-- Messages -->
+      <p *ngIf="successMessage" class="text-green-500 text-center text-sm">{{ successMessage }}</p>
+      <p *ngIf="errorMessage" class="text-red-500 text-center text-sm">{{ errorMessage }}</p>
+    </form>
+
+    <!-- Login -->
+    <p class="text-center text-sm mt-4 text-gray-500 dark:text-gray-400">
+      Already have an account?
+      <a routerLink="/login" class="text-blue-500 hover:underline cursor-pointer"> Log In </a>
+    </p>
+
+    <!-- Divider -->
+    <div class="flex items-center my-4">
+      <div class="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+      <span class="px-2 text-gray-400 text-sm">or</span>
+      <div class="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+    </div>
+
+    <!-- Terms -->
+    <p class="text-xs text-center text-gray-400 mt-4">
+      By signing up you accept Terms of Use and Privacy Policy
+    </p>
+  </div>
+</div>
