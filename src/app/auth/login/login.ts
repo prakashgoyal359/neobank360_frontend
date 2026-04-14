@@ -46,14 +46,23 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: any) => {
-        console.log('Login success:', res);
-
         this.authService.saveToken(res.token);
 
-        this.router.navigate(['/customer_dashboard']);
+        // ✅ Decode JWT
+        const payload = JSON.parse(atob(res.token.split('.')[1]));
+        const role = payload.role;
+
+        console.log('Role:', role);
+
+        // ✅ Redirect based on role
+        if (role === 'ADMIN') {
+          this.router.navigate(['/admin-dashboard']);
+        } else {
+          this.router.navigate(['/customer-dashboard']);
+        }
       },
-      error: (err) => {
-        console.log('ERROR:', err); // if fails
+      error: () => {
+        this.errorMessage = 'Invalid email or password';
       },
     });
   }
