@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Navbar } from './navbar';
+import { provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 describe('Navbar', () => {
   let component: Navbar;
@@ -8,13 +9,18 @@ describe('Navbar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Navbar]
-    })
-    .compileComponents();
+      imports: [Navbar],
+      providers: [
+        provideRouter([]), // ✅ REQUIRED
+        {
+          provide: ActivatedRoute,
+          useValue: {}, // ✅ MOCK
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
   it('should create', () => {
