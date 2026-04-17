@@ -1,0 +1,11 @@
+<div class="min-h-screen bg-black text-white flex flex-col justify-center items-center">
+  <h1 class="text-4xl mb-10 text-green-400">NeoBank360</h1>
+
+  <div class="flex gap-6">
+    <button class="btn" (click)="openRegister()">Open Account</button>
+    <button class="btn" (click)="openLogin()">Login</button>
+  </div>
+
+  <app-register *ngIf="showRegister" (close)="closeAll()"></app-register>
+  <app-login *ngIf="showLogin" (close)="closeAll()"></app-login>
+</div>

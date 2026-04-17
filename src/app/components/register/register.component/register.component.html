@@ -1,0 +1,33 @@
+<div class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
+  <div class="w-150 border border-gray-600 rounded-xl p-6 text-white">
+    <!-- ✅ ADD THIS FORM -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <input class="input" placeholder="First name" formControlName="firstName" />
+      <input class="input" placeholder="Last name" formControlName="lastName" />
+
+      <div class="flex">
+        <span class="px-3 border border-white">+91</span>
+        <input class="input flex-1" placeholder="Mobile" formControlName="mobileNumber" />
+      </div>
+
+      <input class="input" placeholder="PAN" formControlName="panNumber" />
+
+      <!-- Aadhaar -->
+      <div class="flex gap-2">
+        <input class="input flex-1" placeholder="Aadhaar" formControlName="aadharNumber" />
+        <button type="button" class="btn" (click)="getOtp()">Get OTP</button>
+      </div>
+
+      <div class="flex gap-2">
+        <input class="input flex-1" placeholder="OTP" formControlName="otp" />
+        <button type="button" class="btn" (click)="verifyOtp()">Verify</button>
+      </div>
+
+      <input class="input" type="password" placeholder="Password" formControlName="password" />
+
+      <!-- ✅ submit button -->
+      <button type="submit" class="btn w-full mt-4">Submit</button>
+    </form>
+    <!-- ✅ END FORM -->
+  </div>
+</div>

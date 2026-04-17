@@ -1,3 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* 🔥 YOUR CUSTOM CLASSES */
+
+.input {
+  @apply w-full p-3 border border-gray-600 bg-black text-white rounded mb-3;
+}
+
+.btn {
+  @apply border border-gray-500 px-4 py-2 rounded hover:bg-white hover:text-black;
+}
+
+.card {
+  @apply border border-gray-600 p-6 text-center rounded hover:bg-gray-900 cursor-pointer;
+}
