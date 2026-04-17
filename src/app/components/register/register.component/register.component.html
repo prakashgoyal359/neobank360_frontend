@@ -1,33 +1,101 @@
-<div class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
-  <div class="w-150 border border-gray-600 rounded-xl p-6 text-white">
-    <!-- ✅ ADD THIS FORM -->
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <input class="input" placeholder="First name" formControlName="firstName" />
-      <input class="input" placeholder="Last name" formControlName="lastName" />
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b]"
+>
+  <div
+    class="w-[500px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8 shadow-2xl text-white"
+  >
+    <!-- Title -->
+    <h2 class="text-2xl font-bold text-center text-green-400 mb-6">Open Account - NeoBank360</h2>
 
-      <div class="flex">
-        <span class="px-3 border border-white">+91</span>
-        <input class="input flex-1" placeholder="Mobile" formControlName="mobileNumber" />
+    <!-- FORM -->
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-3">
+      <!-- Name -->
+      <div class="grid grid-cols-2 gap-3">
+        <input class="input-dark" placeholder="First name" formControlName="firstName" />
+        <input class="input-dark" placeholder="Last name" formControlName="lastName" />
       </div>
 
-      <input class="input" placeholder="PAN" formControlName="panNumber" />
+      <!-- Mobile -->
+      <div class="flex items-center gap-2">
+        <span class="px-3 py-2 border border-gray-500 rounded-lg text-gray-300">+91</span>
+        <input
+          class="input-dark flex-1"
+          placeholder="Mobile Number"
+          formControlName="mobileNumber"
+        />
+      </div>
 
-      <!-- Aadhaar -->
+      <!-- PAN -->
+      <input class="input-dark" placeholder="PAN Number (ABCDE1234F)" formControlName="panNumber" />
+
+      <!-- Aadhaar + OTP -->
       <div class="flex gap-2">
-        <input class="input flex-1" placeholder="Aadhaar" formControlName="aadharNumber" />
-        <button type="button" class="btn" (click)="getOtp()">Get OTP</button>
+        <input
+          class="input-dark flex-1"
+          placeholder="Aadhaar Number"
+          formControlName="aadharNumber"
+        />
+        <button type="button" class="btn-outline whitespace-nowrap" (click)="getOtp()">
+          Get OTP
+        </button>
       </div>
 
+      <!-- OTP Verify -->
       <div class="flex gap-2">
-        <input class="input flex-1" placeholder="OTP" formControlName="otp" />
-        <button type="button" class="btn" (click)="verifyOtp()">Verify</button>
+        <input class="input-dark flex-1" placeholder="Enter OTP" formControlName="otp" />
+        <button type="button" class="btn-gradient whitespace-nowrap" (click)="verifyOtp()">
+          Verify
+        </button>
       </div>
 
-      <input class="input" type="password" placeholder="Password" formControlName="password" />
+      <!-- Password -->
+      <div>
+        <input
+          class="input-dark"
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+          (input)="checkStrength()"
+        />
 
-      <!-- ✅ submit button -->
-      <button type="submit" class="btn w-full mt-4">Submit</button>
+        <!-- Strength Bar -->
+        <div class="h-2 w-full bg-gray-700 rounded mt-1">
+          <div
+            class="h-2 rounded transition-all duration-300"
+            [ngClass]="strengthColor"
+            [style.width]="
+              passwordStrength === 'Weak' ? '33%' : passwordStrength === 'Medium' ? '66%' : '100%'
+            "
+          ></div>
+        </div>
+
+        <p class="text-sm mt-1 text-gray-300">Strength: {{ passwordStrength }}</p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <input
+          class="input-dark"
+          type="password"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+
+        <!-- Match Error -->
+        <p
+          *ngIf="!passwordMatch() && form.get('confirmPassword')?.touched"
+          class="text-red-400 text-sm mt-1"
+        >
+          Passwords do not match ❌
+        </p>
+      </div>
+      <!-- Submit -->
+      <button type="submit" class="btn-gradient w-full mt-4">Create Account</button>
+
+      <!-- Cancel -->
+      <button type="button" (click)="close.emit()" class="text-gray-400 text-sm w-full mt-2">
+        Cancel
+      </button>
     </form>
-    <!-- ✅ END FORM -->
   </div>
 </div>

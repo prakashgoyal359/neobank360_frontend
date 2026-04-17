@@ -1,14 +1,66 @@
-<div class="min-h-screen bg-black text-white">
+<div class="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b] text-white">
+  <!-- Header -->
+  <div
+    class="flex justify-between items-center p-4 border-b border-white/10 bg-white/5 backdrop-blur-md"
+  >
+    <h1 class="text-2xl font-bold text-orange-400">NeoBank360 Admin</h1>
 
-  <div class="flex justify-between border-b p-4">
-    <h1 class="text-orange-400">NeoBank360 Admin</h1>
-    <button (click)="logout()" class="btn">Logout</button>
+    <button (click)="logout()" class="btn-outline">Logout</button>
   </div>
 
-  <div class="p-6 grid grid-cols-3 gap-4">
-    <div class="card">Users</div>
-    <div class="card">Transactions</div>
-    <div class="card">Reports</div>
-  </div>
+  <!-- Main -->
+  <div class="p-6 space-y-6">
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-6">
+      <div class="card hover:scale-105 transition">
+        <h3 class="text-gray-400">Total Users</h3>
+        <p class="text-3xl font-bold mt-2 text-green-400">120</p>
+      </div>
 
+      <div class="card hover:scale-105 transition">
+        <h3 class="text-gray-400">Transactions</h3>
+        <p class="text-3xl font-bold mt-2 text-blue-400">560</p>
+      </div>
+
+      <div class="card hover:scale-105 transition">
+        <h3 class="text-gray-400">Reports</h3>
+        <p class="text-3xl font-bold mt-2 text-orange-400">Analytics 📊</p>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">Users Overview</h2>
+
+      <table class="w-full text-left">
+        <thead>
+          <tr class="text-gray-400 border-b border-white/10">
+            <th class="py-2">Name</th>
+            <th>Account</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+
+        <tbody class="text-gray-300">
+          <tr class="border-b border-white/10">
+            <td class="py-2">Prakash</td>
+            <td>12005678</td>
+            <td>₹50000</td>
+          </tr>
+
+          <tr class="border-b border-white/10">
+            <td class="py-2">Rahul</td>
+            <td>12006789</td>
+            <td>₹30000</td>
+          </tr>
+
+          <tr>
+            <td class="py-2">Amit</td>
+            <td>12007890</td>
+            <td>₹70000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

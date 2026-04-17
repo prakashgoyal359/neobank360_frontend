@@ -21,6 +21,9 @@ export class RegisterComponent {
   verified = false;
   form!: FormGroup;
 
+  passwordStrength = '';
+  strengthColor = 'bg-red-500';
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -31,9 +34,45 @@ export class RegisterComponent {
       mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       panNumber: ['', Validators.required],
       aadharNumber: ['', [Validators.required, Validators.pattern('^[0-9]{12}$')]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=(.*[@$!%*?&]){2,}).{8,}$'),
+        ],
+      ],
+      confirmPassword: ['', Validators.required],
       otp: ['', Validators.required],
     });
+  }
+
+  // 🔥 PASSWORD STRENGTH CHECK
+  checkStrength() {
+    const value = this.form.value.password || '';
+
+    let strength = 0;
+
+    if (value.length >= 8) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/[a-z]/.test(value)) strength++;
+    if (/\d/.test(value)) strength++;
+    if ((value.match(/[@$!%*?&]/g) || []).length >= 2) strength++;
+
+    if (strength <= 2) {
+      this.passwordStrength = 'Weak';
+      this.strengthColor = 'bg-red-500';
+    } else if (strength <= 4) {
+      this.passwordStrength = 'Medium';
+      this.strengthColor = 'bg-orange-500';
+    } else {
+      this.passwordStrength = 'Strong';
+      this.strengthColor = 'bg-green-500';
+    }
+  }
+
+  // 🔥 CHECK PASSWORD MATCH
+  passwordMatch(): boolean {
+    return this.form.value.password === this.form.value.confirmPassword;
   }
 
   // ✅ SEND OTP
@@ -65,6 +104,10 @@ export class RegisterComponent {
       return;
     }
 
+    if (!this.passwordMatch()) {
+      alert('Passwords do not match ❌');
+      return;
+    }
     if (this.form.invalid) {
       alert('Fill all fields correctly ❌');
       return;

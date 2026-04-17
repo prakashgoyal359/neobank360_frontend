@@ -1,12 +1,56 @@
-<div class="min-h-screen bg-black text-white">
-  <div class="flex justify-between border-b p-4">
-    <h1 class="text-green-400">NeoBank360</h1>
-    <button (click)="logout()" class="btn">Logout</button>
+<div class="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b] text-white">
+  <!-- Header -->
+  <div
+    class="flex justify-between items-center p-4 border-b border-white/10 bg-white/5 backdrop-blur-md"
+  >
+    <h1 class="text-2xl font-bold text-green-400">NeoBank360</h1>
+
+    <button (click)="logout()" class="btn-outline">Logout</button>
   </div>
 
-  <div class="p-6 grid grid-cols-3 gap-4">
-    <div class="card">Balance</div>
-    <div class="card">Transfer</div>
-    <div class="card">Transactions</div>
+  <!-- Main Content -->
+  <div class="p-6 space-y-6">
+    <!-- Top Cards -->
+    <div class="grid grid-cols-3 gap-6">
+      <!-- Balance -->
+      <div class="card hover:scale-105 transition">
+        <h3 class="text-gray-400">Account Balance</h3>
+        <p class="text-3xl font-bold mt-2 text-green-400">₹ 50,000</p>
+      </div>
+
+      <!-- Transfer -->
+      <div class="card hover:scale-105 transition cursor-pointer">
+        <h3 class="text-gray-400">Quick Transfer</h3>
+        <p class="mt-2 text-lg">Send money instantly 💸</p>
+      </div>
+
+      <!-- Transactions -->
+      <div class="card hover:scale-105 transition cursor-pointer">
+        <h3 class="text-gray-400">Transactions</h3>
+        <p class="mt-2 text-lg">View history 📊</p>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">Recent Transactions</h2>
+
+      <div class="space-y-3 text-gray-300">
+        <div class="flex justify-between border-b border-white/10 pb-2">
+          <span>Transfer to Rahul</span>
+          <span class="text-red-400">- ₹2000</span>
+        </div>
+
+        <div class="flex justify-between border-b border-white/10 pb-2">
+          <span>Received from Amit</span>
+          <span class="text-green-400">+ ₹5000</span>
+        </div>
+
+        <div class="flex justify-between">
+          <span>Recharge</span>
+          <span class="text-red-400">- ₹500</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
