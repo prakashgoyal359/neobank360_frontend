@@ -34,6 +34,7 @@ export class RegisterComponent {
       mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       panNumber: ['', Validators.required],
       aadharNumber: ['', [Validators.required, Validators.pattern('^[0-9]{12}$')]],
+      accountType: ['', Validators.required],
       password: [
         '',
         [

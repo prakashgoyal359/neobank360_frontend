@@ -11,11 +11,35 @@
   <!-- Main Content -->
   <div class="p-6 space-y-6">
     <!-- Top Cards -->
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Balance -->
       <div class="card hover:scale-105 transition">
         <h3 class="text-gray-400">Account Balance</h3>
-        <p class="text-3xl font-bold mt-2 text-green-400">₹ 50,000</p>
+        <p class="text-3xl font-bold mt-2 text-green-400">₹ {{ user?.balance }}</p>
+      </div>
+
+      <!-- Account Type -->
+      <div class="card">
+        <h3 class="text-gray-400">Account Type</h3>
+        <p class="text-xl font-bold mt-2 text-blue-400">
+          {{ user?.accountType }}
+        </p>
+      </div>
+
+      <!-- Account Number -->
+      <div class="card">
+        <h3 class="text-gray-400">Account Number</h3>
+        <p class="text-lg mt-2">
+          {{ user?.accountNumber }}
+        </p>
+      </div>
+
+      <!-- Username -->
+      <div class="card">
+        <h3 class="text-gray-400">Username</h3>
+        <p class="text-lg mt-2">
+          {{ user?.username }}
+        </p>
       </div>
 
       <!-- Transfer -->

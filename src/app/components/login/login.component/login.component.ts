@@ -26,6 +26,7 @@ export class LoginComponent {
       const token = res.token; // ✅ FIXED
 
       localStorage.setItem('token', token);
+      localStorage.setItem('accountType', res.accountType);
 
       const role = this.auth.getRole(token);
 

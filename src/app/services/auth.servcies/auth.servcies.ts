@@ -38,6 +38,10 @@ export class AuthService {
     return payload.role;
   }
 
+  getUser() {
+  return this.http.get(`${this.api}/customer/me`);
+}
+
   // ✅ LOGOUT
   logout() {
     localStorage.removeItem('token');

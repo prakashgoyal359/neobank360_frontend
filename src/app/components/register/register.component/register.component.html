@@ -25,6 +25,22 @@
         />
       </div>
 
+      <!-- Account Type -->
+      <select formControlName="accountType" class="input-dark col-span-2">
+        <option value="" disabled selected>Select Account Type</option>
+        <option value="SAVINGS">Savings Account</option>
+        <option value="CURRENT">Current Account</option>
+        <option value="SALARY">Salary Account</option>
+      </select>
+
+      <!-- Error -->
+      <p
+        *ngIf="form.get('accountType')?.invalid && form.get('accountType')?.touched"
+        class="text-red-400 text-sm"
+      >
+        Please select account type ❌
+      </p>
+
       <!-- PAN -->
       <input class="input-dark" placeholder="PAN Number (ABCDE1234F)" formControlName="panNumber" />
 
