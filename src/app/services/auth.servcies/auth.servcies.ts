@@ -39,11 +39,19 @@ export class AuthService {
   }
 
   getUser() {
-  return this.http.get(`${this.api}/customer/me`);
-}
+    return this.http.get(`${this.api}/customer/me`);
+  }
 
   // ✅ LOGOUT
   logout() {
     localStorage.removeItem('token');
+  }
+
+  transfer(data: any) {
+    return this.http.post(`${this.api}/customer/transfer`, data);
+  }
+
+  getTransactions() {
+    return this.http.get(`${this.api}/customer/transactions`);
   }
 }
