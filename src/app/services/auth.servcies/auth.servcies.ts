@@ -54,4 +54,19 @@ export class AuthService {
   getTransactions() {
     return this.http.get(`${this.api}/customer/transactions`);
   }
+
+  // GET USERS
+  getUsers() {
+    return this.http.get(`${this.api}/admin/users`);
+  }
+
+  // DELETE
+  deleteUser(id: number) {
+    return this.http.delete(`${this.api}/admin/user/${id}`);
+  }
+
+  // UPDATE
+  updateUser(id: number, data: any) {
+    return this.http.put(`${this.api}/admin/user/${id}`, data);
+  }
 }

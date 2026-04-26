@@ -1,66 +1,53 @@
-<div class="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b] text-white">
+<div class="min-h-screen bg-linear-to-br from-[#0f172a] via-[#1e293b] to-[#7c2d12] text-white">
   <!-- Header -->
-  <div
-    class="flex justify-between items-center p-4 border-b border-white/10 bg-white/5 backdrop-blur-md"
-  >
-    <h1 class="text-2xl font-bold text-orange-400">NeoBank360 Admin</h1>
-
+  <div class="flex justify-between p-4 border-b border-white/10">
+    <h1 class="text-orange-400 text-2xl font-bold">NeoBank360 Admin</h1>
     <button (click)="logout()" class="btn-outline">Logout</button>
   </div>
 
-  <!-- Main -->
-  <div class="p-6 space-y-6">
-    <!-- Stats -->
-    <div class="grid grid-cols-3 gap-6">
-      <div class="card hover:scale-105 transition">
-        <h3 class="text-gray-400">Total Users</h3>
-        <p class="text-3xl font-bold mt-2 text-green-400">120</p>
-      </div>
+  <div class="p-6">
+    <!-- TABLE -->
+    <table class="w-full border border-white/10 text-left">
+      <thead class="bg-white/10">
+        <tr>
+          <th class="p-2">ID</th>
+          <th class="p-2">Username</th>
+          <th class="p-2">Account Type</th>
+          <th class="p-2">Balance</th>
+          <th class="p-2">Actions</th>
+        </tr>
+      </thead>
 
-      <div class="card hover:scale-105 transition">
-        <h3 class="text-gray-400">Transactions</h3>
-        <p class="text-3xl font-bold mt-2 text-blue-400">560</p>
-      </div>
+      <tbody>
+        <tr *ngFor="let u of users" class="border-t border-white/10">
+          <td class="p-2">{{ u.id }}</td>
+          <td class="p-2">{{ u.username }}</td>
+          <td class="p-2">{{ u.accountType }}</td>
+          <td class="p-2">₹ {{ u.balance }}</td>
 
-      <div class="card hover:scale-105 transition">
-        <h3 class="text-gray-400">Reports</h3>
-        <p class="text-3xl font-bold mt-2 text-orange-400">Analytics 📊</p>
-      </div>
-    </div>
+          <td class="p-2 flex gap-2">
+            <button (click)="startEdit(u)" class="btn-outline">Edit</button>
 
-    <!-- Users Table -->
-    <div class="card">
-      <h2 class="text-xl font-bold mb-4">Users Overview</h2>
+            <button (click)="delete(u.id)" class="text-red-400">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-      <table class="w-full text-left">
-        <thead>
-          <tr class="text-gray-400 border-b border-white/10">
-            <th class="py-2">Name</th>
-            <th>Account</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
+    <!-- EDIT FORM -->
+    <div *ngIf="editUser" class="mt-6 card">
+      <h2 class="text-xl mb-4">Edit User</h2>
 
-        <tbody class="text-gray-300">
-          <tr class="border-b border-white/10">
-            <td class="py-2">Prakash</td>
-            <td>12005678</td>
-            <td>₹50000</td>
-          </tr>
+      <input [(ngModel)]="editUser.firstName" class="input-dark mb-2" placeholder="First Name" />
+      <input [(ngModel)]="editUser.lastName" class="input-dark mb-2" placeholder="Last Name" />
+      <input
+        [(ngModel)]="editUser.balance"
+        type="number"
+        class="input-dark mb-2"
+        placeholder="Balance"
+      />
 
-          <tr class="border-b border-white/10">
-            <td class="py-2">Rahul</td>
-            <td>12006789</td>
-            <td>₹30000</td>
-          </tr>
-
-          <tr>
-            <td class="py-2">Amit</td>
-            <td>12007890</td>
-            <td>₹70000</td>
-          </tr>
-        </tbody>
-      </table>
+      <button (click)="saveEdit()" class="btn-gradient">Save</button>
     </div>
   </div>
 </div>
