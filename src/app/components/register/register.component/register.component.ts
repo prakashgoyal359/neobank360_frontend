@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+
 import {
   FormBuilder,
   Validators,
@@ -6,7 +7,9 @@ import {
   FormsModule,
   FormGroup,
 } from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
+
 import { AuthService } from '../../../services/auth.servcies/auth.servcies';
 
 @Component({
@@ -19,116 +22,226 @@ export class RegisterComponent {
   @Output() close = new EventEmitter();
 
   verified = false;
-  form!: FormGroup;
 
-  passwordStrength = '';
-  strengthColor = 'bg-red-500';
+  kycDone = false;
+
+  form!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private cdr: ChangeDetectorRef,
   ) {
+    // 🔥 ONLY KYC VALIDATION INITIALLY
     this.form = this.fb.group({
+      // 🔐 KYC STEP
       firstName: ['', Validators.required],
+
+      middleName: [''],
+
       lastName: ['', Validators.required],
-      mobileNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      panNumber: ['', Validators.required],
+
       aadharNumber: ['', [Validators.required, Validators.pattern('^[0-9]{12}$')]],
-      accountType: ['', Validators.required],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=(.*[@$!%*?&]){2,}).{8,}$'),
-        ],
-      ],
-      confirmPassword: ['', Validators.required],
+
       otp: ['', Validators.required],
+
+      // 🧾 ACCOUNT STEP
+      gender: [''],
+
+      address: [''],
+
+      email: [''],
+
+      accountType: [''],
+
+      panNumber: [''],
+
+      mobileNumber: [''],
+
+      // 📁 FILES
+      aadharFile: [null],
+
+      panFile: [null],
+
+      photoFile: [null],
     });
-  }
-
-  // 🔥 PASSWORD STRENGTH CHECK
-  checkStrength() {
-    const value = this.form.value.password || '';
-
-    let strength = 0;
-
-    if (value.length >= 8) strength++;
-    if (/[A-Z]/.test(value)) strength++;
-    if (/[a-z]/.test(value)) strength++;
-    if (/\d/.test(value)) strength++;
-    if ((value.match(/[@$!%*?&]/g) || []).length >= 2) strength++;
-
-    if (strength <= 2) {
-      this.passwordStrength = 'Weak';
-      this.strengthColor = 'bg-red-500';
-    } else if (strength <= 4) {
-      this.passwordStrength = 'Medium';
-      this.strengthColor = 'bg-orange-500';
-    } else {
-      this.passwordStrength = 'Strong';
-      this.strengthColor = 'bg-green-500';
-    }
-  }
-
-  // 🔥 CHECK PASSWORD MATCH
-  passwordMatch(): boolean {
-    return this.form.value.password === this.form.value.confirmPassword;
   }
 
   // ✅ SEND OTP
   getOtp() {
-    this.auth.sendOtp(this.form.value.aadharNumber!).subscribe((res: any) => {
+    const aadhar = this.form.value.aadharNumber;
+
+    if (!aadhar || aadhar.length !== 12) {
+      alert('Enter valid Aadhaar ❌');
+
+      return;
+    }
+
+    this.auth.sendOtp(aadhar).subscribe((res: any) => {
       alert(res.message);
 
-      console.log('OTP from backend:', res.otp); // ✅ frontend console
+      console.log('OTP:', res.otp);
     });
   }
 
   // ✅ VERIFY OTP
   verifyOtp() {
+    const aadhar = this.form.value.aadharNumber;
+
     const otp = this.form.value.otp;
 
-    this.auth.verifyOtp(this.form.value.aadharNumber!, Number(otp)).subscribe((res: any) => {
-      alert(res.message);
+    if (!aadhar || aadhar.length !== 12) {
+      alert('Enter valid Aadhaar ❌');
 
+      return;
+    }
+
+    if (!otp) {
+      alert('Enter OTP ❌');
+
+      return;
+    }
+
+    this.auth.verifyOtp(aadhar, Number(otp)).subscribe((res: any) => {
       if (res.message === 'Verified') {
-        this.verified = true;
+        setTimeout(() => {
+          this.verified = true;
+
+          this.kycDone = true;
+
+          // 🔥 REMOVE OTP VALIDATION
+          this.form.get('otp')?.clearValidators();
+
+          this.form.get('otp')?.updateValueAndValidity();
+
+          // 🔥 ADD STEP 2 VALIDATORS
+
+          this.form.get('gender')?.setValidators([Validators.required]);
+
+          this.form.get('address')?.setValidators([Validators.required]);
+
+          this.form.get('email')?.setValidators([Validators.required, Validators.email]);
+
+          this.form.get('accountType')?.setValidators([Validators.required]);
+
+          this.form
+            .get('panNumber')
+            ?.setValidators([Validators.required, Validators.pattern('[A-Z]{5}[0-9]{4}[A-Z]{1}')]);
+
+          this.form
+            .get('mobileNumber')
+            ?.setValidators([Validators.required, Validators.pattern('^[0-9]{10}$')]);
+
+          this.form.get('aadharFile')?.setValidators([Validators.required]);
+
+          this.form.get('panFile')?.setValidators([Validators.required]);
+
+          this.form.get('photoFile')?.setValidators([Validators.required]);
+
+          // 🔥 UPDATE VALIDITY
+          this.form.updateValueAndValidity();
+
+          this.cdr.detectChanges();
+        });
+
+        alert('KYC Verified ✅');
+      } else {
+        alert('Invalid OTP ❌');
       }
     });
   }
 
+  // 📁 FILE UPLOAD
+  onFileChange(event: any, field: string) {
+    const file = event.target.files[0];
+
+    if (file) {
+      this.form.patchValue({
+        [field]: file,
+      });
+
+      this.form.get(field)?.updateValueAndValidity();
+
+      console.log(field, file);
+    }
+  }
+
   // ✅ REGISTER
   submit() {
-    if (!this.verified) {
-      alert('Verify Aadhaar ❌');
+    // 🔥 DEBUG
+    console.log(this.form.value);
+
+    console.log(this.form.status);
+
+    Object.keys(this.form.controls).forEach((key) => {
+      const errors = this.form.get(key)?.errors;
+
+      if (errors) {
+        console.log(key, errors);
+      }
+    });
+
+    // ❌ INVALID
+    if (this.form.invalid) {
+      alert('Fill all fields ❌');
+
       return;
     }
 
-    if (!this.passwordMatch()) {
-      alert('Passwords do not match ❌');
-      return;
-    }
-    if (this.form.invalid) {
-      alert('Fill all fields correctly ❌');
-      return;
-    }
+    // ✅ FORM DATA
+    const formData = new FormData();
 
     const data = {
-      ...this.form.value,
-      mobileNumber: '+91' + this.form.value.mobileNumber,
+      firstName: this.form.value.firstName,
+
+      middleName: this.form.value.middleName,
+
+      lastName: this.form.value.lastName,
+
+      email: this.form.value.email,
+
+      gender: this.form.value.gender,
+
+      address: this.form.value.address,
+
+      aadharNumber: this.form.value.aadharNumber,
+
+      panNumber: this.form.value.panNumber,
+
+      mobileNumber: this.form.value.mobileNumber,
+
+      accountType: this.form.value.accountType,
     };
 
-    this.auth.register(data).subscribe((res: any) => {
-      alert(res.message);
+    // 🔥 JSON PART
+    formData.append(
+      'data',
 
-      // ✅ SHOW GENERATED DATA
-      console.log('Username:', res.username);
-      console.log('Account Number:', res.accountNumber);
+      new Blob([JSON.stringify(data)], {
+        type: 'application/json',
+      }),
+    );
 
-      alert(`Account Created ✅\nUsername: ${res.username}\nAccount: ${res.accountNumber}`);
+    // 📁 FILES
+    formData.append('aadharFile', this.form.value.aadharFile);
 
-      this.close.emit();
+    formData.append('panFile', this.form.value.panFile);
+
+    formData.append('photoFile', this.form.value.photoFile);
+
+    // ✅ API CALL
+    this.auth.register(formData).subscribe({
+      next: (res: any) => {
+        alert(res.message);
+
+        this.close.emit();
+      },
+
+      error: (err) => {
+        console.error(err);
+
+        alert(err.error?.message || 'Registration failed ❌');
+      },
     });
   }
 }

@@ -18,7 +18,7 @@ export class AuthService {
   }
 
   // ✅ VERIFY OTP
-  verifyOtp(aadhar: string, otp: number): Observable<any> {
+  verifyOtp(aadhar: string, otp: number) {
     return this.http.post(`${this.api}/otp/verify?aadhar=${aadhar}&otp=${otp}`, {});
   }
 
@@ -68,5 +68,23 @@ export class AuthService {
   // UPDATE
   updateUser(id: number, data: any) {
     return this.http.put(`${this.api}/admin/user/${id}`, data);
+  }
+
+  approveUser(id: number, data: any) {
+    return this.http.put(`${this.api}/admin/approve/${id}`, data);
+  }
+
+  rejectUser(id: number) {
+    return this.http.put(`${this.api}/admin/reject/${id}`, {});
+  }
+
+  changePassword(username: string, oldPassword: string, newPassword: string) {
+    return this.http.put(
+      `${this.api}/auth/change-password` +
+        `?username=${username}` +
+        `&oldPassword=${oldPassword}` +
+        `&newPassword=${newPassword}`,
+      {},
+    );
   }
 }

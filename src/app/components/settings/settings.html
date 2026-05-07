@@ -1,0 +1,89 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b] p-6 text-white"
+>
+  <!-- HEADER -->
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-green-400">Account Settings</h1>
+
+    <button (click)="logout()" class="btn-outline">Logout</button>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- PROFILE -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">Profile Information</h2>
+
+      <div class="space-y-3 text-gray-300">
+        <p>
+          <span class="text-white font-semibold"> Username: </span>
+
+          {{ user.username }}
+        </p>
+
+        <p>
+          <span class="text-white font-semibold"> Email: </span>
+
+          {{ user.email }}
+        </p>
+
+        <p>
+          <span class="text-white font-semibold"> Account Type: </span>
+
+          {{ user.accountType }}
+        </p>
+
+        <p>
+          <span class="text-white font-semibold"> Mobile: </span>
+
+          {{ user.mobileNumber }}
+        </p>
+      </div>
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4">Change Password</h2>
+
+      <!-- OLD -->
+      <input
+        type="password"
+        [(ngModel)]="oldPassword"
+        class="input-dark mb-4"
+        placeholder="Old Password"
+      />
+
+      <!-- NEW -->
+      <input
+        type="password"
+        [(ngModel)]="newPassword"
+        (input)="checkStrength()"
+        class="input-dark mb-2"
+        placeholder="New Password"
+      />
+
+      <!-- STRENGTH -->
+      <div class="h-2 bg-gray-700 rounded mb-2">
+        <div
+          class="h-2 rounded transition-all"
+          [ngClass]="strengthColor"
+          [style.width]="
+            passwordStrength === 'Weak' ? '33%' : passwordStrength === 'Medium' ? '66%' : '100%'
+          "
+        ></div>
+      </div>
+
+      <p class="text-sm text-gray-300 mb-4">Strength: {{ passwordStrength }}</p>
+
+      <!-- CONFIRM -->
+      <input
+        type="password"
+        [(ngModel)]="confirmPassword"
+        class="input-dark mb-6"
+        placeholder="Confirm Password"
+      />
+
+      <!-- BUTTON -->
+      <button (click)="changePassword()" class="btn-gradient w-full">Update Password</button>
+    </div>
+  </div>
+</div>

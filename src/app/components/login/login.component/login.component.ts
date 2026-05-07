@@ -23,12 +23,14 @@ export class LoginComponent {
 
   login() {
     this.auth.login({ username: this.username, password: this.password }).subscribe((res: any) => {
-      const token = res.token; // ✅ FIXED
+      localStorage.setItem('token', res.token);
 
-      localStorage.setItem('token', token);
-      localStorage.setItem('accountType', res.accountType);
+      if (res.firstLogin) {
+        this.router.navigate(['/settings']);
+        return;
+      }
 
-      const role = this.auth.getRole(token);
+      const role = this.auth.getRole(res.token);
 
       if (role === 'ADMIN') {
         this.router.navigate(['/admin']);

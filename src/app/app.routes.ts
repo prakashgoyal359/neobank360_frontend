@@ -21,4 +21,8 @@ export const routes: Routes = [
         (m) => m.AdminDashboardComponent,
       ),
   },
+  {
+    path: 'settings',
+    loadComponent: () => import('./components/settings/settings').then((m) => m.SettingsComponent),
+  },
 ];

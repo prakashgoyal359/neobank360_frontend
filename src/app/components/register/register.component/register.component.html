@@ -1,117 +1,133 @@
 <div
-  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b]"
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#064e3b] p-6"
 >
   <div
-    class="w-[500px] bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8 shadow-2xl text-white"
+    class="w-full max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 text-white shadow-2xl"
   >
-    <!-- Title -->
-    <h2 class="text-2xl font-bold text-center text-green-400 mb-6">Open Account - NeoBank360</h2>
+    <!-- HEADER -->
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-green-400">NeoBank360</h1>
+
+      <p class="text-gray-300 mt-2">Digital Banking Account Opening</p>
+    </div>
 
     <!-- FORM -->
-    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-3">
-      <!-- Name -->
-      <div class="grid grid-cols-2 gap-3">
-        <input class="input-dark" placeholder="First name" formControlName="firstName" />
-        <input class="input-dark" placeholder="Last name" formControlName="lastName" />
-      </div>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+      <!-- ========================= -->
+      <!-- 🔐 STEP 1 : KYC -->
+      <!-- ========================= -->
 
-      <!-- Mobile -->
-      <div class="flex items-center gap-2">
-        <span class="px-3 py-2 border border-gray-500 rounded-lg text-gray-300">+91</span>
-        <input
-          class="input-dark flex-1"
-          placeholder="Mobile Number"
-          formControlName="mobileNumber"
-        />
-      </div>
+      <div *ngIf="!kycDone">
+        <h2 class="text-2xl font-bold text-center text-green-400 mb-6">Aadhaar KYC Verification</h2>
 
-      <!-- Account Type -->
-      <select formControlName="accountType" class="input-dark col-span-2">
-        <option value="" disabled selected>Select Account Type</option>
-        <option value="SAVINGS">Savings Account</option>
-        <option value="CURRENT">Current Account</option>
-        <option value="SALARY">Salary Account</option>
-      </select>
+        <!-- NAME -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <input formControlName="firstName" class="input-dark" placeholder="First Name" />
 
-      <!-- Error -->
-      <p
-        *ngIf="form.get('accountType')?.invalid && form.get('accountType')?.touched"
-        class="text-red-400 text-sm"
-      >
-        Please select account type ❌
-      </p>
+          <input formControlName="middleName" class="input-dark" placeholder="Middle Name" />
 
-      <!-- PAN -->
-      <input class="input-dark" placeholder="PAN Number (ABCDE1234F)" formControlName="panNumber" />
-
-      <!-- Aadhaar + OTP -->
-      <div class="flex gap-2">
-        <input
-          class="input-dark flex-1"
-          placeholder="Aadhaar Number"
-          formControlName="aadharNumber"
-        />
-        <button type="button" class="btn-outline whitespace-nowrap" (click)="getOtp()">
-          Get OTP
-        </button>
-      </div>
-
-      <!-- OTP Verify -->
-      <div class="flex gap-2">
-        <input class="input-dark flex-1" placeholder="Enter OTP" formControlName="otp" />
-        <button type="button" class="btn-gradient whitespace-nowrap" (click)="verifyOtp()">
-          Verify
-        </button>
-      </div>
-
-      <!-- Password -->
-      <div>
-        <input
-          class="input-dark"
-          type="password"
-          placeholder="Password"
-          formControlName="password"
-          (input)="checkStrength()"
-        />
-
-        <!-- Strength Bar -->
-        <div class="h-2 w-full bg-gray-700 rounded mt-1">
-          <div
-            class="h-2 rounded transition-all duration-300"
-            [ngClass]="strengthColor"
-            [style.width]="
-              passwordStrength === 'Weak' ? '33%' : passwordStrength === 'Medium' ? '66%' : '100%'
-            "
-          ></div>
+          <input formControlName="lastName" class="input-dark" placeholder="Last Name" />
         </div>
 
-        <p class="text-sm mt-1 text-gray-300">Strength: {{ passwordStrength }}</p>
+        <!-- AADHAAR -->
+        <input class="input-dark" placeholder="Aadhaar Number" formControlName="aadharNumber" />
+
+        <!-- OTP BUTTON -->
+        <button type="button" (click)="getOtp()" class="btn-outline w-full">Get OTP</button>
+
+        <!-- OTP -->
+        <input class="input-dark" placeholder="Enter OTP" formControlName="otp" />
+
+        <!-- VERIFY -->
+        <button type="button" (click)="verifyOtp()" class="btn-gradient w-full">
+          Verify & Continue
+        </button>
       </div>
 
-      <!-- Confirm Password -->
-      <div>
-        <input
+      <!-- ========================= -->
+      <!-- 🧾 STEP 2 : ACCOUNT FORM -->
+      <!-- ========================= -->
+
+      <div *ngIf="kycDone" class="space-y-4">
+        <h2 class="text-2xl font-bold text-center text-green-400 mb-4">Open Your Account</h2>
+
+        <!-- AUTO FILLED NAME -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <input formControlName="firstName" class="input-dark opacity-70" readonly />
+
+          <input formControlName="middleName" class="input-dark opacity-70" readonly />
+
+          <input formControlName="lastName" class="input-dark opacity-70" readonly />
+        </div>
+
+        <!-- AUTO FILLED AADHAAR -->
+        <input formControlName="aadharNumber" class="input-dark opacity-70" readonly />
+
+        <!-- EMAIL -->
+        <input formControlName="email" class="input-dark" placeholder="Email Address" />
+
+        <!-- MOBILE -->
+        <input formControlName="mobileNumber" class="input-dark" placeholder="Mobile Number" />
+
+        <!-- GENDER -->
+        <select formControlName="gender" class="input-dark">
+          <option value="">Select Gender</option>
+          <option value="MALE">Male</option>
+          <option value="FEMALE">Female</option>
+          <option value="OTHER">Other</option>
+        </select>
+
+        <!-- ADDRESS -->
+        <textarea
+          formControlName="address"
+          rows="3"
           class="input-dark"
-          type="password"
-          placeholder="Confirm Password"
-          formControlName="confirmPassword"
-        />
+          placeholder="Full Address"
+        ></textarea>
 
-        <!-- Match Error -->
-        <p
-          *ngIf="!passwordMatch() && form.get('confirmPassword')?.touched"
-          class="text-red-400 text-sm mt-1"
-        >
-          Passwords do not match ❌
-        </p>
+        <!-- ACCOUNT TYPE -->
+        <select formControlName="accountType" class="input-dark">
+          <option value="">Select Account Type</option>
+
+          <option value="SAVINGS">Savings Account</option>
+
+          <option value="CURRENT">Current Account</option>
+
+          <option value="SALARY">Salary Account</option>
+        </select>
+
+        <!-- PAN -->
+        <input formControlName="panNumber" class="input-dark" placeholder="PAN Number" />
+
+        <!-- FILE UPLOADS -->
+        <div class="space-y-4">
+          <!-- AADHAAR FILE -->
+          <div>
+            <label class="block text-sm text-gray-300 mb-2"> Upload Aadhaar Card </label>
+
+            <input type="file" class="input-dark" (change)="onFileChange($event, 'aadharFile')" />
+          </div>
+
+          <!-- PAN FILE -->
+          <div>
+            <label class="block text-sm text-gray-300 mb-2"> Upload PAN Card </label>
+
+            <input type="file" class="input-dark" (change)="onFileChange($event, 'panFile')" />
+          </div>
+
+          <!-- PHOTO -->
+          <div>
+            <label class="block text-sm text-gray-300 mb-2"> Upload Passport Size Photo </label>
+
+            <input type="file" class="input-dark" (change)="onFileChange($event, 'photoFile')" />
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="btn-gradient w-full py-3 text-lg">
+          Submit Account Request
+        </button>
       </div>
-      <!-- Submit -->
-      <button type="submit" class="btn-gradient w-full mt-4">Create Account</button>
-
-      <!-- Cancel -->
-      <button type="button" (click)="close.emit()" class="text-gray-400 text-sm w-full mt-2">
-        Cancel
-      </button>
     </form>
   </div>
 </div>
